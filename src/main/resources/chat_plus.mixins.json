@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.flytre.chat_plus.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": ["AnvilScreenHandlerMixin", "ServerPlayNetworkHandlerMixin"],
+  "client": [
+    "AnvilScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
