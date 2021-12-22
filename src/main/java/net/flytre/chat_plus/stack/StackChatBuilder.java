@@ -38,7 +38,7 @@ public class StackChatBuilder {
             return matcher.find() ? style.withColor(TextColor.parse(matcher.group(1))) : style;
         }, null, StackChatBuilder::colorPredicate));
 
-        PATTERNS.add(new PatternData(Pattern.compile("\\$\\$"), (style, match) -> style.obfuscated(true), null, StackChatBuilder::formattingPredicate));
+        PATTERNS.add(new PatternData(Pattern.compile("\\$\\$"), (style, match) -> style.withObfuscated(true), null, StackChatBuilder::formattingPredicate));
 
     }
 
@@ -72,7 +72,7 @@ public class StackChatBuilder {
 
             while (index <= string.length()) {
 
-                //ADVANCED FORWARD MATCHING
+                //FORWARD MATCHING
                 if (index < string.length()) {
                     Optional<PatternMatch> greedy = matches(current + string.charAt(index));
                     String str = greedy.map(match -> match.str).orElse(null);

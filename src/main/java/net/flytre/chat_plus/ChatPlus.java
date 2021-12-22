@@ -3,7 +3,6 @@ package net.flytre.chat_plus;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.flytre.chat_plus.config.Config;
-import net.flytre.flytre_lib.api.base.util.BakeHelper;
 import net.flytre.flytre_lib.api.config.ConfigHandler;
 import net.flytre.flytre_lib.api.config.ConfigRegistry;
 import net.flytre.flytre_lib.api.config.GsonHelper;
@@ -21,7 +20,5 @@ public class ChatPlus implements ModInitializer {
     public void onInitialize() {
         ConfigRegistry.registerServerConfig(CONFIG);
         CONFIG.handle();
-        BakeHelper.fullBake("chat_plus","chat",null);
-
     }
 }
