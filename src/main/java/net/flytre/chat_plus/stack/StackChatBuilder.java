@@ -25,14 +25,14 @@ public class StackChatBuilder {
     static {
         PATTERNS = new ArrayList<>();
         PATTERNS.add(new PatternData(Pattern.compile("~~"), (style, match) -> style.withStrikethrough(true), null, StackChatBuilder::formattingPredicate));
-        PATTERNS.add(new PatternData(Pattern.compile("\\[item]"), (style, match) -> style, (match, player) -> (MutableText) player.getMainHandStack().toHoverableText(), StackChatBuilder::hoverPredicate));
-        PATTERNS.add(new PatternData(Pattern.compile("\\[(entity|me)]"), (style, match) -> style, (match, player) -> addEntityHover(player, (MutableText) player.getDisplayName()), StackChatBuilder::hoverPredicate));
+        PATTERNS.add(new PatternData(Pattern.compile("\\[item]"), (style, match) -> style, (match, player) -> (MutableText) player.getMainHandStack().toHoverableText(), StackChatBuilder::itemPredicate));
+        PATTERNS.add(new PatternData(Pattern.compile("\\[(entity|me)]"), (style, match) -> style, (match, player) -> addEntityHover(player, (MutableText) player.getDisplayName()), StackChatBuilder::mePredicate));
 
         //Bold first because it takes precedence over italics that way
         PATTERNS.add(new PatternData(Pattern.compile("\\*{2}"), (style, match) -> style.withBold(true), null, StackChatBuilder::formattingPredicate));
         PATTERNS.add(new PatternData(Pattern.compile("\\*"), (style, match) -> style.withItalic(true), null, StackChatBuilder::formattingPredicate));
 
-        Pattern color = Pattern.compile("&(([a-z-]+)|(#[0-9a-f]{6})) ",Pattern.CASE_INSENSITIVE);
+        Pattern color = Pattern.compile("&(([a-z-]+)|(#[0-9a-f]{6})) ", Pattern.CASE_INSENSITIVE);
         PATTERNS.add(new PatternData(color, Pattern.compile("/&"), (style, match) -> {
             Matcher matcher = color.matcher(match);
             return matcher.find() ? style.withColor(TextColor.parse(matcher.group(1))) : style;
@@ -50,10 +50,15 @@ public class StackChatBuilder {
         return ClassicChatBuilder.passesOpCheck(player, ChatPlus.CONFIG.getConfig().formatOp);
     }
 
-    private static boolean hoverPredicate(PlayerEntity player) {
-        return ClassicChatBuilder.passesOpCheck(player, ChatPlus.CONFIG.getConfig().hoverOp) && !player.getMainHandStack().isEmpty();
+    private static boolean itemPredicate(PlayerEntity player) {
+        return mePredicate(player) && !player.getMainHandStack().isEmpty();
+
+
     }
 
+    private static boolean mePredicate(PlayerEntity player) {
+        return ClassicChatBuilder.passesOpCheck(player, ChatPlus.CONFIG.getConfig().hoverOp);
+    }
 
     private static void addIfNonEmpty(String str, Stack<Token> tokens) {
         if (str.length() > 0)
